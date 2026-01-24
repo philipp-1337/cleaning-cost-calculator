@@ -22,7 +22,7 @@ This is a web application for calculating and managing cleaning costs, built wit
 
 ### Prerequisites
 
-- Node.js & npm
+- [Bun](https://bun.sh/) (statt Node.js & npm)
 - Firebase account
 
 ### Installation
@@ -37,7 +37,7 @@ This is a web application for calculating and managing cleaning costs, built wit
 1. Install dependencies:
 
  ```bash
- npm install
+ bun install
  ```
 
 1. Configure Firebase:
@@ -48,13 +48,13 @@ This is a web application for calculating and managing cleaning costs, built wit
 ### Running Locally
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 ### Building for Production
 
 ```bash
-npm run build
+bun run build
 ```
 
 ### Deployment

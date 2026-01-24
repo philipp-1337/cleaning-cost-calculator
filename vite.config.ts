@@ -8,4 +8,26 @@ export default defineConfig({
     react(),
     tailwindcss()
   ],
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("firebase")) {
+              return "firebase";
+            }
+            if (id.includes("lucide-react")) {
+              return "lucide";
+            }
+            if (id.includes("react")) {
+              return "react";
+            }
+            return "vendor";
+          }
+        },
+      },
+    },
+  },
 })
