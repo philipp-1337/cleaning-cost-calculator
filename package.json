@@ -4,10 +4,10 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "bun run vite",
-    "build": "bun run tsc -b && bun run vite build",
-    "lint": "bun run eslint .",
-    "preview": "bun run vite preview"
+    "dev": "bunx --bun vite",
+    "build": "bun run tsc -b && bunx --bun vite build",
+    "lint": "bunx eslint .",
+    "preview": "bunx --bun vite preview"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
