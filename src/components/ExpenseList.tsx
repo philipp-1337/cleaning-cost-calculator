@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchExpensesFromFirestore, deleteExpenseFromFirestore } from "../services/firestoreService";
+import { subscribeToExpenses, deleteExpenseFromFirestore } from "../services/firestoreService";
 import type { Expense } from "../types";
 
 export default function ExpenseList() {
@@ -8,21 +8,21 @@ export default function ExpenseList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetchExpenses();
-  }, []);
-
-  async function fetchExpenses() {
     setLoading(true);
-    setError(null);
+    let unsubscribe: (() => void) | undefined;
     try {
-      const data = await fetchExpensesFromFirestore();
-      setExpenses(data as Expense[]);
+      unsubscribe = subscribeToExpenses((data: Expense[]) => {
+        setExpenses(data);
+        setLoading(false);
+      });
     } catch (err) {
       setError("Fehler beim Laden der Auslagen.");
-    } finally {
       setLoading(false);
     }
-  }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   async function handleDelete(id: string | number) {
     if (!window.confirm("Auslage wirklich löschen?")) return;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Entry, NewEntry } from '../types';
 import { 
-  fetchEntriesFromFirestore, 
+  subscribeToEntries, 
   saveEntryToFirestore, 
   deleteEntryFromFirestore,
   updateEntryInFirestore 
@@ -14,12 +14,12 @@ export function useEntries() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Load entries from Firestore
+  // Realtime-Updates für Einträge
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const loadedEntries = await fetchEntriesFromFirestore();
+    setLoading(true);
+    let unsubscribe: (() => void) | undefined;
+    try {
+      unsubscribe = subscribeToEntries((loadedEntries: Entry[]) => {
         const processedEntries = loadedEntries.map((entry: any) => ({
           id: entry.id,
           date: entry.date || '',
@@ -28,18 +28,20 @@ export function useEntries() {
           minutes: entry.minutes || 0,
           totalHours: calculateTotalHours(entry.hours || 0, entry.minutes || 0),
           cost: calculateCost(
-            entry.persons || 0, 
+            entry.persons || 0,
             calculateTotalHours(entry.hours || 0, entry.minutes || 0)
-          ),
+          )
         }));
         setEntries(sortByDate(processedEntries));
-      } catch (e) {
-        console.error('Fehler beim Laden der Einträge:', e);
-        setError('Fehler beim Laden der Einträge');
-      } finally {
         setLoading(false);
-      }
-    })();
+      });
+    } catch (e) {
+      setError('Fehler beim Laden der Einträge');
+      setLoading(false);
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Add new entry

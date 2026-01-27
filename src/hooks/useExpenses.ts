@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { fetchExpensesFromFirestore, deleteExpenseFromFirestore, updateExpenseInFirestore } from "../services/firestoreService";
+import { deleteExpenseFromFirestore, updateExpenseInFirestore } from "../services/firestoreService";
+import { subscribeToExpenses } from "../services/firestoreService";
 import type { Expense } from "../types";
 
 export function useExpenses() {
@@ -7,18 +8,20 @@ export function useExpenses() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchExpenses();
-  }, []);
-
-  async function fetchExpenses() {
     setLoading(true);
+    let unsubscribe: (() => void) | undefined;
     try {
-      const data = await fetchExpensesFromFirestore();
-      setExpenses(data as Expense[]);
-    } finally {
+      unsubscribe = subscribeToExpenses((data: Expense[]) => {
+        setExpenses(data);
+        setLoading(false);
+      });
+    } catch (e) {
       setLoading(false);
     }
-  }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
+  }, []);
 
   async function deleteExpense(id: string | number) {
     await deleteExpenseFromFirestore(String(id));

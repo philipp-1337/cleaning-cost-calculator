@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Payment, NewPayment } from '../types';
 import { 
-  fetchPaymentsFromFirestore, 
+  subscribeToPayments, 
   savePaymentToFirestore, 
   deletePaymentFromFirestore, 
   updatePaymentInFirestore
@@ -14,24 +14,27 @@ export function usePayments() {
   const [error, setError] = useState<string | null>(null);
 
   // Load payments from Firestore
+  // Realtime-Updates für Zahlungen
   useEffect(() => {
-    (async () => {
-      try {
-        setLoading(true);
-        const loadedPayments = await fetchPaymentsFromFirestore();
+    setLoading(true);
+    let unsubscribe: (() => void) | undefined;
+    try {
+      unsubscribe = subscribeToPayments((loadedPayments: Payment[]) => {
         const processedPayments = loadedPayments.map((payment: any) => ({
           id: payment.id,
           date: payment.date || '',
           amount: payment.amount || 0,
         }));
         setPayments(sortByDate(processedPayments));
-      } catch (e) {
-        console.error('Fehler beim Laden der Zahlungen:', e);
-        setError('Fehler beim Laden der Zahlungen');
-      } finally {
         setLoading(false);
-      }
-    })();
+      });
+    } catch (e) {
+      setError('Fehler beim Laden der Zahlungen');
+      setLoading(false);
+    }
+    return () => {
+      if (unsubscribe) unsubscribe();
+    };
   }, []);
 
   // Add new payment
