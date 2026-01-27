@@ -1,5 +1,5 @@
 import { RATE_PER_PERSON_PER_HOUR } from '../constants';
-import type { Entry, Payment } from '../types';
+import type { Entry, Payment, Expense } from '../types';
 
 export function calculateTotalHours(hours: number, minutes: number): number {
   return hours + minutes / 60;
@@ -13,10 +13,22 @@ export function calculateTotalCosts(entries: Entry[]): number {
   return entries.reduce((sum, entry) => sum + entry.cost, 0);
 }
 
+export function calculateTotalExpenses(expenses: Expense[]): number {
+  return expenses.reduce((sum, exp) => sum + exp.amount, 0);
+}
+
+export function calculateTotalAllCosts(entries: Entry[], expenses: Expense[]): number {
+  return calculateTotalCosts(entries) + calculateTotalExpenses(expenses);
+}
+
 export function calculateTotalPaid(payments: Payment[]): number {
   return payments.reduce((sum, payment) => sum + payment.amount, 0);
 }
 
 export function calculateBalance(totalPaid: number, totalCosts: number): number {
   return totalPaid - totalCosts;
+}
+
+export function calculateBalanceWithExpenses(totalPaid: number, entries: Entry[], expenses: Expense[]): number {
+  return totalPaid - calculateTotalAllCosts(entries, expenses);
 }

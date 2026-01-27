@@ -11,37 +11,45 @@ import CombinedList from './components/CombinedList';
 import ImportExportSection from './components/ImportExportSection';
 import Spinner from './Spinner';
 import TabBar from './components/TabBar';
-import { 
-  calculateTotalCosts, 
-  calculateTotalPaid, 
-  calculateBalance 
+
+import ExpenseForm from './components/ExpenseForm';
+import {
+  calculateTotalPaid,
+  calculateTotalExpenses,
+  calculateTotalAllCosts,
+  calculateBalanceWithExpenses
 } from './utils/calculations';
+import { useExpenses } from './hooks/useExpenses';
 
 export default function CleaningCalculator() {
   const { logout } = useAuth();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Custom hooks for data management
-  const { 
-    entries, 
-    loading: entriesLoading, 
-    addEntry, 
-    updateEntry, 
-    deleteEntry 
+  const {
+    entries,
+    loading: entriesLoading,
+    addEntry,
+    updateEntry,
+    deleteEntry
   } = useEntries();
 
-  const { 
-    payments, 
-    loading: paymentsLoading, 
-    addPayment, 
+  const {
+    payments,
+    loading: paymentsLoading,
+    addPayment,
     deletePayment,
     updatePayment
   } = usePayments();
 
+  // Expenses für Summary laden
+  const { expenses, loading: expensesLoading, deleteExpense, updateExpense } = useExpenses();
+
   // Calculate totals
-  const totalCosts = calculateTotalCosts(entries);
+  const totalCosts = calculateTotalAllCosts(entries, expenses);
   const totalPaid = calculateTotalPaid(payments);
-  const balance = calculateBalance(totalPaid, totalCosts);
+  const balance = calculateBalanceWithExpenses(totalPaid, entries, expenses);
+  const totalExpenses = calculateTotalExpenses(expenses);
   const loading = entriesLoading || paymentsLoading;
 
   // Import/Export functionality
@@ -106,6 +114,9 @@ export default function CleaningCalculator() {
                 <EntryForm onAdd={addEntry} />
                 <PaymentForm onAdd={addPayment} />
               </div>
+              <div className="mt-8">
+                <ExpenseForm />
+              </div>
             </ImportExportSection>
           </>
         ) : (
@@ -115,7 +126,8 @@ export default function CleaningCalculator() {
               totalCosts={totalCosts}
               totalPaid={totalPaid}
               balance={balance}
-              loading={loading}
+              loading={loading || expensesLoading}
+              totalExpenses={totalExpenses}
             />
             <div className="bg-white rounded-lg shadow-lg p-6 mt-6">
               <h2 className="text-xl font-semibold text-gray-700 mb-4">Übersicht</h2>
@@ -132,10 +144,13 @@ export default function CleaningCalculator() {
                   <CombinedList
                     entries={entries}
                     payments={payments}
+                    expenses={expenses}
                     onDeleteEntry={deleteEntry}
                     onUpdateEntry={updateEntry}
                     onDeletePayment={deletePayment}
                     onUpdatePayment={updatePayment}
+                    onDeleteExpense={deleteExpense}
+                    onUpdateExpense={updateExpense}
                   />
                 </div>
               )}

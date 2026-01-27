@@ -24,3 +24,13 @@ export type ImportData = {
   payments: Payment[];
   exportDate?: string;
 };
+
+export type Expense = {
+  id: number | string;
+  date: string;
+  description: string;
+  amount: number;
+  buyer?: string;
+};
+
+export type NewExpense = Omit<Expense, 'id'>;
