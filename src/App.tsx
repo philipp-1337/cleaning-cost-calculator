@@ -61,7 +61,7 @@ export default function CleaningCalculator() {
     handleDragOver,
     handleDragLeave,
     handleDrop
-  } = useImportExport(entries, payments, () => {
+  } = useImportExport(entries, payments, expenses, () => {
     // Reload page after import to fetch new data
     window.location.reload();
   });

@@ -22,6 +22,7 @@ export type EditableEntry = Omit<Entry, 'id' | 'totalHours' | 'cost'>;
 export type ImportData = {
   entries: Entry[];
   payments: Payment[];
+  expenses: Expense[];
   exportDate?: string;
 };
 
