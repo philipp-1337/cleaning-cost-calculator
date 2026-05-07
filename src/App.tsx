@@ -79,7 +79,7 @@ export default function CleaningCalculator() {
           </h1>
           <button
             onClick={logout}
-            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition flex items-center justify-center"
+            className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition flex items-center justify-center cursor-pointer"
             aria-label="Logout"
           >
             <span className="md:hidden">

@@ -16,11 +16,10 @@ export function useEntries() {
 
   // Realtime-Updates für Einträge
   useEffect(() => {
-    setLoading(true);
     let unsubscribe: (() => void) | undefined;
     try {
       unsubscribe = subscribeToEntries((loadedEntries: Entry[]) => {
-        const processedEntries = loadedEntries.map((entry: any) => ({
+        const processedEntries = loadedEntries.map((entry: Entry) => ({
           id: entry.id,
           date: entry.date || '',
           persons: entry.persons || 0,
@@ -35,9 +34,11 @@ export function useEntries() {
         setEntries(sortByDate(processedEntries));
         setLoading(false);
       });
-    } catch (e) {
-      setError('Fehler beim Laden der Einträge');
-      setLoading(false);
+    } catch {
+      setTimeout(() => {
+        setError('Fehler beim Laden der Einträge');
+        setLoading(false);
+      }, 0);
     }
     return () => {
       if (unsubscribe) unsubscribe();

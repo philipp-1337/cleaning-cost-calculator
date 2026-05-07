@@ -37,7 +37,7 @@ export default function EditEntryModal({ entry, onSave, onClose }: EditEntryModa
     }
   };
 
-  const handleChange = (field: keyof NewEntry, value: any) => {
+  const handleChange = (field: keyof NewEntry, value: string | number) => {
     setEditValues({ ...editValues, [field]: value });
   };
 
@@ -96,14 +96,14 @@ export default function EditEntryModal({ entry, onSave, onClose }: EditEntryModa
             <button
               onClick={handleSave}
               disabled={isSaving}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition disabled:opacity-50"
+              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition disabled:opacity-50 cursor-pointer"
             >
               {isSaving ? 'Speichern...' : 'Speichern'}
             </button>
             <button
               onClick={onClose}
               disabled={isSaving}
-              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition disabled:opacity-50"
+              className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition disabled:opacity-50 cursor-pointer"
             >
               Abbrechen
             </button>

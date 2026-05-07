@@ -35,7 +35,7 @@ export default function ExpenseForm({ onSaved }: { onSaved?: () => void }) {
       await saveExpenseToFirestore(expense);
       setExpense(initialState);
       if (onSaved) onSaved();
-    } catch (err) {
+    } catch {
       setError("Fehler beim Speichern der Auslage.");
     } finally {
       setLoading(false);
@@ -94,7 +94,7 @@ export default function ExpenseForm({ onSaved }: { onSaved?: () => void }) {
         <button
           onClick={handleSubmit}
           disabled={loading}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
         >
           <Plus size={20} />
           {loading ? "Speichern..." : "Auslage hinzufügen"}

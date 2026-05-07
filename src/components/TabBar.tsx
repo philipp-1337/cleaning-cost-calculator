@@ -13,7 +13,7 @@ const TabBar: React.FC<TabBarProps> = ({ tabs, activeTab, onTabChange }: TabBarP
         <button
           key={tab}
           className={
-            `flex-1 py-3 px-6 text-base font-medium rounded-t-lg transition-colors duration-200 ` +
+            `flex-1 py-3 px-6 text-base font-medium rounded-t-lg transition-colors duration-200 cursor-pointer ` +
             (activeTab === idx
               ? "bg-white text-blue-600 font-bold shadow"
               : "bg-transparent text-gray-700 hover:bg-gray-200")

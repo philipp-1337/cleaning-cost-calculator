@@ -56,20 +56,27 @@ export default function CombinedList({
     if (confirm('Eintrag wirklich löschen?')) {
       try {
         await onDeleteEntry(id);
-      } catch (e) {
+      } catch {
         alert('Fehler beim Löschen!');
-      }
-    }
+      }    }
   };
 
   const handleDeletePayment = async (id: string | number) => {
     if (confirm('Zahlung wirklich löschen?')) {
       try {
         await onDeletePayment(id);
-      } catch (e) {
+      } catch {
         alert('Fehler beim Löschen!');
-      }
-    }
+      }    }
+  };
+
+  const handleDeleteExpense = async (id: string | number) => {
+    if (confirm('Auslage wirklich löschen?')) {
+      try {
+        await onDeleteExpense(id);
+      } catch {
+        alert('Fehler beim Löschen!');
+      }    }
   };
 
   const handleSaveEdit = async (entry: NewEntry) => {
@@ -77,7 +84,7 @@ export default function CombinedList({
     try {
       await onUpdateEntry(editingEntry.id, entry);
       setEditingEntry(null);
-    } catch (e) {
+    } catch {
       alert('Fehler beim Speichern!');
     }
   };
@@ -88,14 +95,14 @@ export default function CombinedList({
     try {
       await onUpdatePayment(editingPayment.id, payment);
       setEditingPayment(null);
-    } catch (e) {
+    } catch {
       alert('Fehler beim Speichern!');
     } finally {
       setSavingPayment(false);
     }
   };
 
-  function ItemRow({ item }: { item: any }) {
+  function ItemRow({ item }: { item: (Entry & { type: 'entry' }) | (Payment & { type: 'payment' }) | (Expense & { type: 'expense' }) }) {
     const isEntry = item.type === 'entry';
     const isPayment = item.type === 'payment';
     const isExpense = item.type === 'expense';
@@ -128,8 +135,8 @@ export default function CombinedList({
             <span className="font-bold text-blue-700 text-xs">{formatCurrency(item.amount)}</span>
           )}
           <button
-            onClick={() => isEntry ? handleDeleteEntry(item.id) : isPayment ? handleDeletePayment(item.id) : setEditingExpense(item as Expense)}
-            className="text-blue-500 hover:text-blue-700 transition p-0.5 flex items-center"
+            onClick={() => isEntry ? setEditingEntry(item as Entry) : isPayment ? setEditingPayment(item as Payment) : setEditingExpense(item as Expense)}
+            className="text-blue-500 hover:text-blue-700 transition p-0.5 flex items-center cursor-pointer"
             title="Bearbeiten"
             aria-label="Bearbeiten"
           >
@@ -137,8 +144,8 @@ export default function CombinedList({
             <span className="hidden sm:inline ml-1">Bearbeiten</span>
           </button>
           <button
-            onClick={() => isEntry ? handleDeleteEntry(item.id) : isPayment ? handleDeletePayment(item.id) : onDeleteExpense(item.id)}
-            className="text-red-500 hover:text-red-700 transition p-0.5 flex items-center"
+            onClick={() => isEntry ? handleDeleteEntry(item.id) : isPayment ? handleDeletePayment(item.id) : handleDeleteExpense(item.id)}
+            className="text-red-500 hover:text-red-700 transition p-0.5 flex items-center cursor-pointer"
             title="Löschen"
             aria-label="Löschen"
           >
@@ -214,14 +221,14 @@ export default function CombinedList({
                 <button
                   type="button"
                   onClick={() => setEditingExpense(null)}
-                  className="px-4 py-2 bg-gray-200 rounded-lg"
+                  className="px-4 py-2 bg-gray-200 rounded-lg cursor-pointer"
                   disabled={savingExpense}
                 >
                   Abbrechen
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-lg cursor-pointer"
                   disabled={savingExpense}
                 >
                   {savingExpense ? 'Speichern...' : 'Speichern'}
@@ -269,14 +276,14 @@ export default function CombinedList({
                 <button
                   type="button"
                   onClick={() => setEditingPayment(null)}
-                  className="px-4 py-2 bg-gray-200 rounded-lg"
+                  className="px-4 py-2 bg-gray-200 rounded-lg cursor-pointer"
                   disabled={savingPayment}
                 >
                   Abbrechen
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg cursor-pointer"
                   disabled={savingPayment}
                 >
                   {savingPayment ? 'Speichern...' : 'Speichern'}

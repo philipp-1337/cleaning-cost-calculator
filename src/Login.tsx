@@ -24,11 +24,12 @@ export default function Login() {
     try {
       await login(email, password);
       // Navigation erfolgt automatisch durch useEffect
-    } catch (err: any) {
+    } catch (err) {
+      const firebaseError = err as { code?: string };
       let message = "Login fehlgeschlagen. Bitte prüfen Sie Ihre Zugangsdaten.";
-      if (err?.code === "auth/user-not-found") message = "Benutzer nicht gefunden.";
-      if (err?.code === "auth/wrong-password") message = "Falsches Passwort.";
-      if (err?.code === "auth/invalid-email") message = "Ungültige E-Mail-Adresse.";
+      if (firebaseError?.code === "auth/user-not-found") message = "Benutzer nicht gefunden.";
+      if (firebaseError?.code === "auth/wrong-password") message = "Falsches Passwort.";
+      if (firebaseError?.code === "auth/invalid-email") message = "Ungültige E-Mail-Adresse.";
       setError(message);
     } finally {
       setLoading(false); // Hide spinner
@@ -67,7 +68,7 @@ export default function Login() {
         ) : (
           <button
             type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition cursor-pointer"
           >
             Login
           </button>

@@ -37,7 +37,7 @@ export default function ImportExportSection({
         <div className="flex gap-2">
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center"
+            className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center cursor-pointer"
             aria-label="Importieren"
           >
             <span className="sm:hidden">
@@ -59,7 +59,7 @@ export default function ImportExportSection({
           />
           <button
             onClick={onExport}
-            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center"
+            className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center cursor-pointer"
             aria-label="Exportieren"
           >
             <span className="sm:hidden">
@@ -69,7 +69,7 @@ export default function ImportExportSection({
           </button>
           <button
             onClick={onHumanExport}
-            className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center"
+            className="bg-yellow-500 hover:bg-yellow-600 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center cursor-pointer"
             aria-label="Human Export"
           >
             <span className="sm:hidden">

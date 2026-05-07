@@ -8,15 +8,14 @@ export function useExpenses() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
     let unsubscribe: (() => void) | undefined;
     try {
       unsubscribe = subscribeToExpenses((data: Expense[]) => {
         setExpenses(data);
         setLoading(false);
       });
-    } catch (e) {
-      setLoading(false);
+    } catch {
+      setTimeout(() => setLoading(false), 0);
     }
     return () => {
       if (unsubscribe) unsubscribe();

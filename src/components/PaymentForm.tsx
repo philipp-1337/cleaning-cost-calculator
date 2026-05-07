@@ -25,7 +25,7 @@ export default function PaymentForm({ onAdd }: PaymentFormProps) {
         amount: parseFloat(newPayment.amount)
       });
       setNewPayment(DEFAULT_NEW_PAYMENT);
-    } catch (e) {
+    } catch {
       alert('Fehler beim Speichern!');
     } finally {
       setIsSubmitting(false);
@@ -63,7 +63,7 @@ export default function PaymentForm({ onAdd }: PaymentFormProps) {
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
         >
           <Plus size={20} />
           Zahlung hinzufügen

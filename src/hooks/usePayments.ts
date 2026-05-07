@@ -16,11 +16,10 @@ export function usePayments() {
   // Load payments from Firestore
   // Realtime-Updates für Zahlungen
   useEffect(() => {
-    setLoading(true);
     let unsubscribe: (() => void) | undefined;
     try {
       unsubscribe = subscribeToPayments((loadedPayments: Payment[]) => {
-        const processedPayments = loadedPayments.map((payment: any) => ({
+        const processedPayments = loadedPayments.map((payment: Payment) => ({
           id: payment.id,
           date: payment.date || '',
           amount: payment.amount || 0,
@@ -28,9 +27,11 @@ export function usePayments() {
         setPayments(sortByDate(processedPayments));
         setLoading(false);
       });
-    } catch (e) {
-      setError('Fehler beim Laden der Zahlungen');
-      setLoading(false);
+    } catch {
+      setTimeout(() => {
+        setError('Fehler beim Laden der Zahlungen');
+        setLoading(false);
+      }, 0);
     }
     return () => {
       if (unsubscribe) unsubscribe();

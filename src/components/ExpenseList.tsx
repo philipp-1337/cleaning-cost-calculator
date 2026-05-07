@@ -8,16 +8,17 @@ export default function ExpenseList() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setLoading(true);
     let unsubscribe: (() => void) | undefined;
     try {
       unsubscribe = subscribeToExpenses((data: Expense[]) => {
         setExpenses(data);
         setLoading(false);
       });
-    } catch (err) {
-      setError("Fehler beim Laden der Auslagen.");
-      setLoading(false);
+    } catch {
+      setTimeout(() => {
+        setError("Fehler beim Laden der Auslagen.");
+        setLoading(false);
+      }, 0);
     }
     return () => {
       if (unsubscribe) unsubscribe();
@@ -52,7 +53,7 @@ export default function ExpenseList() {
               <span className="font-bold text-blue-700">{exp.amount.toFixed(2)} €</span>
               <button
                 onClick={() => handleDelete(exp.id)}
-                className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded transition border border-red-200 bg-white"
+                className="text-red-500 hover:text-red-700 text-sm px-2 py-1 rounded transition border border-red-200 bg-white cursor-pointer"
                 title="Löschen"
               >
                 &#10006;

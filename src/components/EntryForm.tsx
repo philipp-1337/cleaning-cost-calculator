@@ -20,7 +20,7 @@ export default function EntryForm({ onAdd }: EntryFormProps) {
     try {
       await onAdd(newEntry);
       setNewEntry(DEFAULT_NEW_ENTRY);
-    } catch (e) {
+    } catch {
       alert('Fehler beim Speichern!');
     } finally {
       setIsSubmitting(false);
@@ -89,7 +89,7 @@ export default function EntryForm({ onAdd }: EntryFormProps) {
         <button
           onClick={handleSubmit}
           disabled={isSubmitting}
-          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50"
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition flex items-center justify-center gap-2 disabled:opacity-50 cursor-pointer"
         >
           <Plus size={20} />
           Einsatz hinzufügen

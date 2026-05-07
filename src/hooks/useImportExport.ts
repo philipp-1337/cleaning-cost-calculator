@@ -71,7 +71,7 @@ export function useImportExport(
           }
         }
         onImportSuccess(data.entries || [], data.payments || [], data.expenses || []);
-      } catch (err) {
+      } catch {
         alert('Ungültige JSON-Datei!');
       }
     };
@@ -156,13 +156,13 @@ export function useImportExport(
           const personen = entry.persons;
           gesamtKosten += entry.cost;
           saldo -= entry.cost;
-          text += `Am ${date} wurde die Reinigung von ${personen} Person${personen === 1 ? '' : 'en'} für ${stunden} Stunde${stunden === 1 ? '' : 'n'}${minuten > 0 ? ` und ${minuten} Minute${minuten === 1 ? '' : 'n'}` : ''} durchgeführt. Die Kosten betrugen ${entry.cost.toFixed(2)} €.\n`;
+          text += `Am ${date} wurde die Reinigung von ${personen} Person${personen === 1 ? '' : 'en'} für ${stunden} Stunde${stunden === 1 ? '' : 'n'}${minuten > 0 ? ` und ${minuten} Minute${minuten === 1 ? '' : 'n'}` : ''} durchgeführt. Die Kosten betrugen ${entry.cost.toFixed(2)} €.\n`;
         } else if (item.type === 'payment') {
           const payment = item.payment;
           gesamtZahlungen += payment.amount;
           saldo += payment.amount;
-          text += `Am ${date} wurde eine Zahlung in Höhe von ${payment.amount.toFixed(2)} € geleistet.\n`;
-          text += `Der Saldo betrug ${saldo.toFixed(2)} €`;
+          text += `Am ${date} wurde eine Zahlung in Höhe von ${payment.amount.toFixed(2)} € geleistet.\n`;
+          text += `Der Saldo betrug ${saldo.toFixed(2)} €`;
           if (saldo > 0) {
             text += ' (Guthaben)';
           }
@@ -171,13 +171,13 @@ export function useImportExport(
           const expense = item.expense;
           gesamtAuslagen += expense.amount;
           saldo -= expense.amount;
-          text += `Am ${date} wurde eine Ausgabe in Höhe von ${expense.amount.toFixed(2)} € für "${expense.description}"${expense.buyer ? ` (Käufer: ${expense.buyer})` : ''} erfasst.\n`;
+          text += `Am ${date} wurde eine Ausgabe in Höhe von ${expense.amount.toFixed(2)} € für "${expense.description}"${expense.buyer ? ` (Käufer: ${expense.buyer})` : ''} erfasst.\n`;
         }
       });
-      text += `\nGesamtkosten: ${gesamtKosten.toFixed(2)} €\n`;
-      text += `Gesamte Zahlungen: ${gesamtZahlungen.toFixed(2)} €\n`;
-      text += `Gesamtauslagen: ${gesamtAuslagen.toFixed(2)} €\n`;
-      text += `Endsaldo: ${saldo.toFixed(2)} €\n`;
+      text += `\nGesamtkosten: ${gesamtKosten.toFixed(2)} €\n`;
+      text += `Gesamte Zahlungen: ${gesamtZahlungen.toFixed(2)} €\n`;
+      text += `Gesamtauslagen: ${gesamtAuslagen.toFixed(2)} €\n`;
+      text += `Endsaldo: ${saldo.toFixed(2)} €\n`;
     }
     text += `\nFreundliche Grüße!`;
     const blob = new Blob([text], { type: 'text/plain' });
