@@ -4,14 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      assignees:
-       - "philipp-1337"
-    
-    # Optional: Limitiert die Anzahl der gleichzeitig offenen PRs
+    assignees:
+      - "philipp-1337"    
     open-pull-requests-limit: 5
-    
-    # Optional: Fasst alle Security/Patch-Updates in kleineren Gruppen zusammen (falls das Repository sehr viele hat)
-    # ignore:
-    #   - dependency-name: "*"
-    #     update-types: ["version-update:semver-major"]
-
